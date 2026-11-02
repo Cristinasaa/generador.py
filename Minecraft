@@ -1,0 +1,211 @@
+pickaxe_durability = 0
+
+def show_inventory():
+    print("\n--- INVENTARIO ---")
+
+    for item, qty in inventory.items():
+        print("{}: {}".format(item.capitalize(), qty))
+
+    if inventory["pico"] > 0:
+        print("Durabilidad del pico: {}".format(pickaxe_durability))
+
+    print()
+
+def chop_tree():
+    print("\nHas talado un arbol y obtuviste 1 madera.")
+    inventory["madera"] += 1
+    time.sleep(1)
+  
+def mine_stone():
+    global pickaxe_durability
+
+    if inventory["pico"] > 0 and pickaxe_durability > 0:
+        print("\nEstas picando piedra con tu pico...")
+        time.sleep(1)
+
+        inventory["piedra"] += 1
+        pickaxe_durability -= 1
+
+        print("Has conseguido 1 piedra.")
+        print("Usos restantes del pico: {}".format(
+            pickaxe_durability
+        ))
+
+        if pickaxe_durability <= 0:
+            inventory["pico"] -= 1
+            pickaxe_durability = 0
+            print("Tu pico se ha roto.")
+
+    else:
+        print("\nNecesitas fabricar un pico para picar piedra.")
+
+      
+def mine_iron():
+    global pickaxe_durability
+
+    if inventory["pico"] > 0 and pickaxe_durability > 0:
+        print("\nEstas picando hierro con tu pico...")
+        time.sleep(1)
+
+        inventory["hierro"] += 1
+        pickaxe_durability -= 1
+
+        print("Has conseguido 1 hierro.")
+        print("Hierro en tu inventario: {}".format(
+            inventory["hierro"]
+        ))
+        print("Usos restantes del pico: {}".format(
+            pickaxe_durability
+        ))
+
+        if pickaxe_durability <= 0:
+            inventory["pico"] -= 1
+            pickaxe_durability = 0
+            print("Tu pico se ha roto.")
+
+    else:
+        print("\nNecesitas fabricar un pico para picar hierro.")
+
+def craft_pickaxe():
+    global pickaxe_durability
+
+    if inventory["madera"] >= 3:
+        print("\nFabricando un pico...")
+
+        inventory["madera"] -= 3
+        inventory["pico"] += 1
+        pickaxe_durability = 5
+
+        print("Has fabricado un pico con 5 usos.")
+        time.sleep(1)
+
+    else:
+        print("\nNecesitas 3 de madera para fabricar un pico.")
+
+
+def craft_stone_sword():
+    if inventory["piedra"] >= 3 and inventory["madera"] >= 1:
+        print("\nFabricando espada de piedra...")
+
+        inventory["piedra"] -= 3
+        inventory["madera"] -= 1
+        inventory["espada de piedra"] += 1
+
+        print("Has fabricado una espada de piedra.")
+        time.sleep(1)
+
+    else:
+        print("\nNecesitas 3 de piedra y 1 de madera.")
+
+def craft_iron_armor():
+    if inventory["hierro"] >= 5:
+        print("\nFabricando armadura de hierro...")
+
+        inventory["hierro"] -= 5
+        inventory["armadura de hierro"] += 1
+
+        print("Has fabricado una armadura de hierro.")
+        time.sleep(1)
+
+    else:
+        print("\nNecesitas 5 de hierro para fabricar la armadura.")
+
+def craft_iron_sword():
+    if inventory["hierro"] >= 3 and inventory["madera"] >= 1:
+        print("\nFabricando espada de hierro...")
+
+        inventory["hierro"] -= 3
+        inventory["madera"] -= 1
+        inventory["espada de hierro"] += 1
+
+        print("Has fabricado una espada de hierro.")
+        time.sleep(1)
+
+    else:
+        print("\nNecesitas 3 de hierro y 1 de madera.")
+
+
+def craft_iron_axe():
+    if inventory["hierro"] >= 3 and inventory["madera"] >= 2:
+        print("\nFabricando hacha de hierro...")
+
+        inventory["hierro"] -= 3
+        inventory["madera"] -= 2
+        inventory["hacha de hierro"] += 1
+
+        print("Has fabricado un hacha de hierro.")
+        time.sleep(1)
+
+    else:
+        print("\nNecesitas 3 de hierro y 2 de madera.")
+
+def crafting_menu():
+    while True:
+        print("\n--- FABRICACION ---")
+        print("1. Fabricar pico (3 madera)")
+        print("2. Fabricar espada de piedra (3 piedra y 1 madera)")
+        print("3. Fabricar armadura de hierro (5 hierro)")
+        print("4. Fabricar espada de hierro (3 hierro y 1 madera)")
+        print("5. Fabricar hacha de hierro (3 hierro y 2 madera)")
+        print("6. Volver al menu principal")
+
+        choice = input(">> ").strip()
+
+        if choice == "1":
+            craft_pickaxe()
+
+        elif choice == "2":
+            craft_stone_sword()
+
+        elif choice == "3":
+            craft_iron_armor()
+
+        elif choice == "4":
+            craft_iron_sword()
+
+        elif choice == "5":
+            craft_iron_axe()
+
+        elif choice == "6":
+            break
+
+        else:
+            print("Opcion no valida. Intenta nuevamente.")
+
+def game_loop():
+    print("Bienvenido a Minicraft")
+
+    while True:
+        print("\n--- MENU PRINCIPAL ---")
+        print("1. Talar un arbol")
+        print("2. Picar piedra")
+        print("3. Picar hierro")
+        print("4. Fabricar objetos")
+        print("5. Mostrar inventario")
+        print("6. Salir")
+
+        choice = input(">> ").strip()
+
+        if choice == "1":
+            chop_tree()
+
+        elif choice == "2":
+            mine_stone()
+
+        elif choice == "3":
+            mine_iron()
+
+        elif choice == "4":
+            crafting_menu()
+
+        elif choice == "5":
+            show_inventory()
+
+        elif choice == "6":
+            print("Hasta pronto, explorador.")
+            break
+
+        else:
+            print("Opcion no valida. Intenta nuevamente.")
+
+game_loop()
